@@ -26,6 +26,8 @@ namespace osu.Game.Rulesets.Catch.Objects
 
         public int ComboIndex { get; set; }
 
+        public virtual int IndexInMap { get; set; }
+
         /// <summary>
         /// The distance for a fruit to to next hyper if it's not a hyper.
         /// </summary>

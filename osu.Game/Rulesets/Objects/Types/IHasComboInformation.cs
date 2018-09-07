@@ -22,5 +22,10 @@ namespace osu.Game.Rulesets.Objects.Types
         /// Whether this is the last object in the current combo.
         /// </summary>
         bool LastInCombo { get; set; }
+        
+        /// <summary>
+        /// The offset of this hitobject in relation to the beatrmap
+        /// </summary>
+        int IndexInMap { get; set; }
     }
 }
