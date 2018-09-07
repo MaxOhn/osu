@@ -38,7 +38,9 @@ namespace osu.Game.Rulesets.Osu.Mods
             if (!(drawable is DrawableOsuHitObject d))
                 return;
 
-            d.ScaleTo(new Vector2(d.Scale.X*amountDrawables/(amountDrawables + d.HitObject.ComboIndex)));
+            var h = d.HitObject;
+            using (d.BeginAbsoluteSequence(h.StartTime - h.TimePreempt))
+                d.ScaleTo(new Vector2(d.Scale.X * amountDrawables / (amountDrawables + d.HitObject.IndexInMap)));
         }
     }
 }

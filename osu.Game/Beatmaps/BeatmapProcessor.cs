@@ -22,8 +22,13 @@ namespace osu.Game.Beatmaps
         {
             IHasComboInformation lastObj = null;
 
+            int counter = 0;
+
             foreach (var obj in Beatmap.HitObjects.OfType<IHasComboInformation>())
             {
+
+                obj.IndexInMap = counter++;
+
                 if (obj.NewCombo)
                 {
                     obj.IndexInCurrentCombo = 0;
