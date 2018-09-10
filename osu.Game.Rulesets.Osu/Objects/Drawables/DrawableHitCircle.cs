@@ -21,6 +21,8 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
         private readonly NumberPiece number;
         private readonly GlowPiece glow;
 
+        public CirclePiece hole;
+
         public DrawableHitCircle(HitCircle h)
             : base(h)
         {

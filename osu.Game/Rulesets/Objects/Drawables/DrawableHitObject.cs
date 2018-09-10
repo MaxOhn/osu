@@ -214,6 +214,8 @@ namespace osu.Game.Rulesets.Objects.Drawables
             OnNewResult?.Invoke(this, Result);
         }
 
+        public Func<DrawableHitObject, bool> CheckCanHit;
+
         /// <summary>
         /// Processes this <see cref="DrawableHitObject"/>, checking if a scoring result has occurred.
         /// </summary>
@@ -224,6 +226,9 @@ namespace osu.Game.Rulesets.Objects.Drawables
             judgementOccurred = false;
 
             if (AllJudged)
+                return false;
+
+            if (CheckCanHit?.Invoke(this) == false)
                 return false;
 
             foreach (var d in NestedHitObjects)
