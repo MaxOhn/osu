@@ -20,8 +20,10 @@ using OpenTK.Graphics.ES30;
 
 namespace osu.Game.Rulesets.Osu.UI.Cursor
 {
-    internal class CursorTrail : Drawable, IRequireHighFrequencyMousePosition
+    internal class CursorTrail : Drawable, IRequireHighFrequencyMousePosition, IAdjustableCursorTrail
     {
+        public bool updateShader = true;
+
         private int currentIndex;
 
         private Shader shader;
@@ -44,7 +46,7 @@ namespace osu.Game.Rulesets.Osu.UI.Cursor
 
         private readonly InputResampler resampler = new InputResampler();
 
-        protected override DrawNode CreateDrawNode() => new TrailDrawNode();
+        protected override DrawNode CreateDrawNode() => new TrailDrawNode(this);
 
         protected override void ApplyDrawNode(DrawNode node)
         {
@@ -174,6 +176,7 @@ namespace osu.Game.Rulesets.Osu.UI.Cursor
 
         private class TrailDrawNode : DrawNode
         {
+            public CursorTrail outer;
             public Shader Shader;
             public Texture Texture;
 
@@ -183,13 +186,14 @@ namespace osu.Game.Rulesets.Osu.UI.Cursor
             public readonly TrailPart[] Parts = new TrailPart[max_sprites];
             public Vector2 Size;
 
-            public TrailDrawNode()
+            public TrailDrawNode(CursorTrail o = null)
             {
                 for (int i = 0; i < max_sprites; i++)
                 {
                     Parts[i].InvalidationID = 0;
                     Parts[i].WasUpdated = false;
                 }
+                outer = o;
             }
 
             public override void Draw(Action<TexturedVertex2D> vertexAction)
@@ -197,7 +201,8 @@ namespace osu.Game.Rulesets.Osu.UI.Cursor
                 if (Shared.VertexBuffer == null)
                     Shared.VertexBuffer = new QuadVertexBuffer<TexturedTrailVertex>(max_sprites, BufferUsageHint.DynamicDraw);
 
-                Shader.GetUniform<float>("g_FadeClock").UpdateValue(ref Time);
+                if(outer?.updateShader ?? true)
+                    Shader.GetUniform<float>("g_FadeClock").UpdateValue(ref Time);
 
                 int updateStart = -1, updateEnd = 0;
                 for (int i = 0; i < Parts.Length; ++i)

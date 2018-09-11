@@ -23,7 +23,7 @@ namespace osu.Game.Rulesets.Osu.UI.Cursor
 
         protected override Container<Drawable> Content => fadeContainer;
 
-        private readonly Container<Drawable> fadeContainer;
+        public Container<Drawable> fadeContainer;
 
         public GameplayCursor()
         {
