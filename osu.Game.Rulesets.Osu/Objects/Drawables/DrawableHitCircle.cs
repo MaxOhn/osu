@@ -36,9 +36,17 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
                 glow = new GlowPiece(),
                 circle = new CirclePiece
                 {
+                    hole = new CirclePiece
+                    {
+                        Scale = new Vector2(h.Scale),
+                        //Alpha = 0.7f,
+                        Hit = () => false
+                    },
                     Hit = () =>
                     {
-                        if (AllJudged)
+                        var saveH = hole?.IsHovered ?? false;
+                        Console.WriteLine("hole: " + hole + "; is hovered: " + saveH);
+                        if (AllJudged || saveH)
                             return false;
 
                         UpdateResult(true);
@@ -58,6 +66,8 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
                     Scale = new Vector2(4),
                 }
             };
+
+            //Console.WriteLine("hitobject scale: " + Scale + "; circle scale: " + circle?.Scale + "; hole scale: " + circle?.hole.Scale);
 
             //may not be so correct
             Size = circle.DrawSize;
