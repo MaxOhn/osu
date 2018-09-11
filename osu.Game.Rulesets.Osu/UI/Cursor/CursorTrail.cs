@@ -20,7 +20,7 @@ using OpenTK.Graphics.ES30;
 
 namespace osu.Game.Rulesets.Osu.UI.Cursor
 {
-    internal class CursorTrail : Drawable, IRequireHighFrequencyMousePosition, IAdjustableCursorTrail
+    internal class CursorTrail : Drawable, IRequireHighFrequencyMousePosition
     {
         public bool updateShader = true;
 
