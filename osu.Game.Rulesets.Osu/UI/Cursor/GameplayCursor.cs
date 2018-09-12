@@ -23,7 +23,7 @@ namespace osu.Game.Rulesets.Osu.UI.Cursor
 
         protected override Container<Drawable> Content => fadeContainer;
 
-        public Container<Drawable> fadeContainer;
+        private readonly Container<Drawable> fadeContainer;
 
         public GameplayCursor()
         {
@@ -43,6 +43,16 @@ namespace osu.Game.Rulesets.Osu.UI.Cursor
         private const float released_scale = 1f;
 
         private float targetScale => downCount > 0 ? pressed_scale : released_scale;
+
+        public void toggleTrailUpdateShader() {
+            foreach (var child in fadeContainer.Children)
+            {
+                if (child is CursorTrail)
+                {
+                    (child as CursorTrail).updateShader ^= true;    // XOR with true to flip boolean
+                }
+            }
+        }
 
         public bool OnPressed(OsuAction action)
         {

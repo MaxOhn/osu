@@ -21,19 +21,7 @@ namespace osu.Game.Rulesets.Osu.Mods
 
         public void ApplyToRulesetContainer(RulesetContainer<OsuHitObject> rulesetContainer)
         {
-            var cursor = (GameplayCursor)rulesetContainer.Cursor;
-            var cursorChildren = cursor.fadeContainer.Children;
-            CursorTrail trail = null;
-            foreach (var child in cursorChildren)
-            {
-                if (child is CursorTrail)
-                {
-                    trail = (CursorTrail)child;
-                    break;
-                }
-            }
-            if (trail != null)
-                trail.updateShader = false;
+            (rulesetContainer.Cursor as GameplayCursor).toggleTrailUpdateShader();
         }
     }
 }
