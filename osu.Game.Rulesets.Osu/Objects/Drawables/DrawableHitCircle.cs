@@ -18,10 +18,13 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
         private readonly RingPiece ring;
         private readonly FlashPiece flash;
         private readonly ExplodePiece explode;
-        private readonly NumberPiece number;
+        //private readonly NumberPiece number;
         private readonly GlowPiece glow;
 
-        public CirclePiece hole;
+        private readonly CirclePiece hole;
+        private readonly RingPiece holeRing;
+
+        private const float holeScale = 2.5f;
 
         public DrawableHitCircle(HitCircle h)
             : base(h)
@@ -36,28 +39,29 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
                 glow = new GlowPiece(),
                 circle = new CirclePiece
                 {
-                    hole = new CirclePiece
-                    {
-                        Scale = new Vector2(h.Scale),
-                        //Alpha = 0.7f,
-                        Hit = () => false
-                    },
                     Hit = () =>
                     {
-                        var saveH = hole?.IsHovered ?? false;
-                        Console.WriteLine("hole: " + hole + "; is hovered: " + saveH);
-                        if (AllJudged || saveH)
+                        if (AllJudged || (hole?.IsHovered ?? false))
                             return false;
 
                         UpdateResult(true);
                         return true;
                     },
                 },
+                hole = new CirclePiece
+                {
+                    Hit = () => !AllJudged,
+                    Scale = new Vector2(circle.Scale.X/holeScale, circle.Scale.Y/holeScale),
+                },/*
                 number = new NumberPiece
                 {
                     Text = (HitObject.IndexInCurrentCombo + 1).ToString(),
-                },
+                },*/
                 ring = new RingPiece(),
+                holeRing = new RingPiece
+                {
+                    Scale = new Vector2(ring.Scale.X/holeScale, ring.Scale.Y/holeScale),
+                },
                 flash = new FlashPiece(),
                 explode = new ExplodePiece(),
                 ApproachCircle = new ApproachCircle
@@ -66,8 +70,6 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
                     Scale = new Vector2(4),
                 }
             };
-
-            //Console.WriteLine("hitobject scale: " + Scale + "; circle scale: " + circle?.Scale + "; hole scale: " + circle?.hole.Scale);
 
             //may not be so correct
             Size = circle.DrawSize;
@@ -85,6 +87,7 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
                 glow.Colour = AccentColour;
                 circle.Colour = AccentColour;
                 ApproachCircle.Colour = AccentColour;
+                hole.Colour = Color4.Black;
             }
         }
 
@@ -150,7 +153,10 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
                         //after the flash, we can hide some elements that were behind it
                         ring.FadeOut();
                         circle.FadeOut();
-                        number.FadeOut();
+                        //number.FadeOut();
+
+                        holeRing.FadeOut();
+                        hole.FadeOut();
 
                         this.FadeOut(800)
                             .ScaleTo(Scale * 1.5f, 400, Easing.OutQuad);

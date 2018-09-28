@@ -13,7 +13,6 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables.Pieces
     public class CirclePiece : Container, IKeyBindingHandler<OsuAction>
     {
         public Func<bool> Hit;
-        public CirclePiece hole;
 
         public CirclePiece()
         {
@@ -33,13 +32,7 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables.Pieces
             {
                 case OsuAction.LeftButton:
                 case OsuAction.RightButton:
-                    var saveH = IsHovered;
-                    var saveHI = (Hit?.Invoke() ?? false);
-                    var saveHole = !(hole?.IsHovered ?? false);
-                    //Console.WriteLine("total onPressed: " + (saveH && saveHI) + "; is hovered: " + saveH + "; hit invoke: " + saveHI + "; hole hovered: " + saveHole);
-                    //Console.WriteLine("hole: " + hole + "; is hovered: " + hole?.IsHovered);
-                    return saveH && saveHI && saveHole;
-                    return IsHovered && (Hit?.Invoke() ?? false) && !(hole?.IsHovered ?? false);
+                    return IsHovered && (Hit?.Invoke() ?? false);
             }
 
             return false;
