@@ -6,6 +6,7 @@ using osu.Game.Graphics;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Osu.Objects.Drawables;
+using OpenTK.Graphics;
 
 namespace osu.Game.Rulesets.Osu.Mods
 {
@@ -21,18 +22,9 @@ namespace osu.Game.Rulesets.Osu.Mods
         {
             foreach (var drawable in drawables)
             {
-                drawable.CheckCanHit = d =>
-                {
-                    // definitely todo
-                    return true;
-                };
-                drawable.ApplyCustomUpdateState += drawableOnApplyCustomUpdateState; // not necessary?
+                if (drawable is DrawableHitCircle d)
+                    d.ChangeToTorus();
             }
-        }
-
-        private void drawableOnApplyCustomUpdateState(DrawableHitObject drawable, ArmedState state)
-        {
-            // maybe todo?
         }
     }
 }
