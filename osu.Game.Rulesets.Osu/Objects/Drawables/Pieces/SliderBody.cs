@@ -24,6 +24,22 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables.Pieces
         private readonly Path path;
         private readonly BufferedContainer container;
 
+        /*// Feels weird, looks weird, not necessary
+        private SliderBody holeBody;
+        public void ChangeToTorus(Vector2 newPos)
+        {
+            AddInternal(
+                holeBody = new SliderBody(slider)
+                {
+                    PathWidth = slider.Scale * 64 / 3,
+                    Colour = Color4.Black,
+                    RelativePositionAxes = Axes.None,
+                    Position = newPos,
+                }
+            );
+        }
+        //*/
+
         public float PathWidth
         {
             get { return path.PathWidth; }

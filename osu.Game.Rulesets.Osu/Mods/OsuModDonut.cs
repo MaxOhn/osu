@@ -23,7 +23,9 @@ namespace osu.Game.Rulesets.Osu.Mods
             foreach (var drawable in drawables)
             {
                 if (drawable is DrawableHitCircle d)
-                    d.ChangeToTorus();
+                    d.ChangeToTorus(4f);
+                else if (drawable is DrawableSlider s)
+                    s.ChangeToTorus(4f);
             }
         }
     }

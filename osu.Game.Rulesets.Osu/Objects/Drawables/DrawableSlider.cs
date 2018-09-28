@@ -26,6 +26,15 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
         public readonly SliderBody Body;
         public readonly SliderBall Ball;
 
+        public SliderBody HoleBody;
+
+        public void ChangeToTorus(float holeScale)
+        {
+            HeadCircle.ChangeToTorus(holeScale);
+            Ball.ChangeToTorus(holeScale, slider.Scale);
+            //Body.ChangeToTorus(HeadCircle.AnchorPosition + HeadCircle.Size * HeadCircle.Scale / 3);
+        }
+
         public DrawableSlider(Slider s)
             : base(s)
         {

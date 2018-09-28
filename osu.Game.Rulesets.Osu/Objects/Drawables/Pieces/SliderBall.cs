@@ -10,6 +10,7 @@ using osu.Framework.Input.States;
 using osu.Game.Rulesets.Objects.Types;
 using OpenTK.Graphics;
 using osu.Game.Skinning;
+using OpenTK;
 
 namespace osu.Game.Rulesets.Osu.Objects.Drawables.Pieces
 {
@@ -37,6 +38,28 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables.Pieces
         public readonly Drawable FollowCircle;
         private Drawable drawableBall;
         private readonly DrawableSlider drawableSlider;
+        
+        private CirclePiece hole;
+        private RingPiece holeRing;
+        //private const float holeScale = (float)3*2/3;     // Higher = smaller hole = easier
+
+        public void ChangeToTorus(float holeS, float newScale)
+        {
+            float holeScale = holeS * 2 / 3;
+            AddInternal(
+                hole = new CirclePiece
+                {
+                    Scale = new Vector2(Scale.X / holeScale, Scale.Y / holeScale),
+                    Colour = Color4.Black,
+                }
+            );
+            AddInternal(
+                holeRing = new RingPiece
+                {
+                    Scale = new Vector2(Scale.X / holeScale, Scale.Y / holeScale),
+                }
+            );
+        }
 
         public SliderBall(Slider slider, DrawableSlider drawableSlider = null)
         {
@@ -157,7 +180,8 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables.Pieces
                 Tracking = canCurrentlyTrack
                            && lastState != null
                            && ReceiveMouseInputAt(lastState.Mouse.NativeState.Position)
-                           && (drawableSlider?.OsuActionInputManager?.PressedActions.Any(x => x == OsuAction.LeftButton || x == OsuAction.RightButton) ?? false);
+                           && (drawableSlider?.OsuActionInputManager?.PressedActions.Any(x => x == OsuAction.LeftButton || x == OsuAction.RightButton) ?? false)
+                           && !(hole?.IsHovered ?? false);
             }
         }
 
