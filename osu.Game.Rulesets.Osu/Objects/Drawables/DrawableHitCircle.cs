@@ -24,7 +24,6 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
         private bool isTorus = false;
         private CirclePiece hole;
         private RingPiece holeRing;
-        //private const float holeScale = 3f;     // Higher = smaller hole = easier
 
         public void ChangeToTorus(float holeScale)
         {
@@ -33,14 +32,14 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables
                 hole = new CirclePiece
                 {
                     Hit = () => !AllJudged,     // same as for regular circle but without UpdateResult(true)
-                    Scale = new Vector2(circle.Scale.X / holeScale, circle.Scale.Y / holeScale),
+                    Scale = circle.Scale / holeScale,
                     Colour = Color4.Black,
                 }
             );
             AddInternal(
                 holeRing = new RingPiece
                 {
-                    Scale = new Vector2(ring.Scale.X / holeScale, ring.Scale.Y / holeScale),
+                    Scale = ring.Scale / holeScale,
                 }
             );
             RemoveInternal(number);

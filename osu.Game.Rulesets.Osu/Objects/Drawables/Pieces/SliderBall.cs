@@ -41,7 +41,6 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables.Pieces
         
         private CirclePiece hole;
         private RingPiece holeRing;
-        //private const float holeScale = (float)3*2/3;     // Higher = smaller hole = easier
 
         public void ChangeToTorus(float holeS, float newScale)
         {
@@ -49,14 +48,14 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables.Pieces
             AddInternal(
                 hole = new CirclePiece
                 {
-                    Scale = new Vector2(Scale.X / holeScale, Scale.Y / holeScale),
+                    Scale = Scale / holeScale,
                     Colour = Color4.Black,
                 }
             );
             AddInternal(
                 holeRing = new RingPiece
                 {
-                    Scale = new Vector2(Scale.X / holeScale, Scale.Y / holeScale),
+                    Scale = Scale / holeScale,
                 }
             );
         }
@@ -181,7 +180,8 @@ namespace osu.Game.Rulesets.Osu.Objects.Drawables.Pieces
                            && lastState != null
                            && ReceiveMouseInputAt(lastState.Mouse.NativeState.Position)
                            && (drawableSlider?.OsuActionInputManager?.PressedActions.Any(x => x == OsuAction.LeftButton || x == OsuAction.RightButton) ?? false)
-                           && !(hole?.IsHovered ?? false);
+                           //&& !(hole?.IsHovered ?? false)     // This is really evil
+                           ;
             }
         }
 
