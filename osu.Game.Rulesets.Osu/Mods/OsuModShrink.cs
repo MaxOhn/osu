@@ -48,11 +48,15 @@ namespace osu.Game.Rulesets.Osu.Mods
                         nestedObj.ScaleTo(new Vector2(nestedObj.Scale.X * rescale));
                 }
             }
-            else if (drawable is DrawableOsuHitObject d && !(drawable is DrawableSpinner))
+            else if (drawable is DrawableHitCircle d)
             {
                 var h = d.HitObject;
+                float rescale = (float)amountDrawables / (amountDrawables + d.HitObject.IndexInMap);
                 using (d.BeginAbsoluteSequence(h.StartTime - h.TimePreempt))
-                    d.ScaleTo(new Vector2(d.Scale.X * amountDrawables / (amountDrawables + d.HitObject.IndexInMap)));
+                    d.ScaleTo(new Vector2(d.Scale.X * rescale))
+                        .Delay(h.TimePreempt)
+                        .FadeOut(800)
+                        .ScaleTo(d.Scale.X * rescale * 1.5f, 400, Easing.OutQuad);  // reapply overwritten ScaleTo
             }
         }
     }
