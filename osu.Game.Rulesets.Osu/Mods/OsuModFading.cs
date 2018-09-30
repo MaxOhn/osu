@@ -42,12 +42,15 @@ namespace osu.Game.Rulesets.Osu.Mods
 
             var h = d.HitObject;
 
-            //d.ScaleTo(new Vector2(d.Scale.X * amountDrawables / (amountDrawables + d.HitObject.ComboIndex)));
-
             using (d.BeginAbsoluteSequence(h.StartTime - h.TimePreempt, true))
             {
                 d.FadeTo(Math.Max(0.05f, 1 - ((float)d.HitObject.IndexInMap / amountDrawables)), h.TimeFadeIn);
-                Console.WriteLine("Combo: " + d.HitObject.IndexInMap + " ---- Alpha: 1-" + d.HitObject.IndexInMap + "/" + amountDrawables + "=1-" + ((float)d.HitObject.IndexInMap / amountDrawables) + "=" + (1 - ((float)d.HitObject.IndexInMap / amountDrawables)));
+                if (drawable is DrawableHitCircle c)
+                {
+                    c.Delay(h.TimePreempt)
+                        .FadeOut(800)
+                        .ScaleTo(d.Scale * 1.5f, 400, Easing.OutQuad);      // Repplay overwritten ScaleTo
+                }
             }
             
             if(d is DrawableSlider)
