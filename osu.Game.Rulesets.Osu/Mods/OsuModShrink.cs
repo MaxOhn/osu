@@ -16,7 +16,7 @@ namespace osu.Game.Rulesets.Osu.Mods
     {
         public override string Name => "Shrink";
         public override string ShortenedName => "SK";
-        public override FontAwesome Icon => FontAwesome.fa_bullseye;
+        public override FontAwesome Icon => FontAwesome.fa_bullseye;    // TODO: Find better icon
         public override ModType Type => ModType.Fun;
         public override string Description => "Is it me or are they getting smaller?";
         public override double ScoreMultiplier => 1;
@@ -29,25 +29,26 @@ namespace osu.Game.Rulesets.Osu.Mods
             foreach (var drawable in drawables)
             {
                 counter++;
-                drawable.ApplyCustomUpdateState += shrinkObject;
+                drawable.ApplyCustomUpdateState += ShrinkObject;
             }
             amountDrawables = counter;
         }
 
-        protected void shrinkObject(DrawableHitObject drawable, ArmedState state)
+        protected void ShrinkObject(DrawableHitObject drawable, ArmedState state)
         {
             if (drawable is DrawableSlider s)
             {
                 var h = s.HitObject;
+                float rescale = (float)amountDrawables / (amountDrawables + s.HitObject.IndexInMap);
                 using (s.BeginAbsoluteSequence(h.StartTime - h.TimePreempt))
                 {
-                    s.Body.PathWidth = s.Body.PathWidth * amountDrawables / (amountDrawables + s.HitObject.IndexInMap);
-                    s.Ball.ScaleTo(new Vector2(s.Ball.Scale.X * amountDrawables / (amountDrawables + s.HitObject.IndexInMap)));
+                    s.Body.PathWidth = s.Body.PathWidth * rescale;
+                    s.Ball.ScaleTo(new Vector2(s.Ball.Scale.X * rescale));
                     foreach (var nestedObj in s.NestedHitObjects)
-                        nestedObj.ScaleTo(new Vector2(nestedObj.Scale.X * amountDrawables / (amountDrawables + s.HitObject.IndexInMap)));
+                        nestedObj.ScaleTo(new Vector2(nestedObj.Scale.X * rescale));
                 }
             }
-            else if (drawable is DrawableOsuHitObject d)
+            else if (drawable is DrawableOsuHitObject d && !(drawable is DrawableSpinner))
             {
                 var h = d.HitObject;
                 using (d.BeginAbsoluteSequence(h.StartTime - h.TimePreempt))
