@@ -7,6 +7,7 @@ using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Osu.Objects.Drawables;
 using System.Collections.Generic;
+using osu.Game.Rulesets.Osu.Objects.Drawables.Pieces;
 using OpenTK;
 
 namespace osu.Game.Rulesets.Osu.Mods
@@ -28,19 +29,30 @@ namespace osu.Game.Rulesets.Osu.Mods
             foreach (var drawable in drawables)
             {
                 counter++;
-                drawable.ApplyCustomUpdateState += drawableOnApplyCustomUpdateState;
+                drawable.ApplyCustomUpdateState += shrinkObject;
             }
             amountDrawables = counter;
         }
 
-        protected void drawableOnApplyCustomUpdateState(DrawableHitObject drawable, ArmedState state)
+        protected void shrinkObject(DrawableHitObject drawable, ArmedState state)
         {
-            if (!(drawable is DrawableOsuHitObject d))
-                return;
-
-            var h = d.HitObject;
-            using (d.BeginAbsoluteSequence(h.StartTime - h.TimePreempt))
-                d.ScaleTo(new Vector2(d.Scale.X * amountDrawables / (amountDrawables + d.HitObject.IndexInMap)));
+            if (drawable is DrawableSlider s)
+            {
+                var h = s.HitObject;
+                using (s.BeginAbsoluteSequence(h.StartTime - h.TimePreempt))
+                {
+                    s.Body.PathWidth = s.Body.PathWidth * amountDrawables / (amountDrawables + s.HitObject.IndexInMap);
+                    s.Ball.ScaleTo(new Vector2(s.Ball.Scale.X * amountDrawables / (amountDrawables + s.HitObject.IndexInMap)));
+                    foreach (var nestedObj in s.NestedHitObjects)
+                        nestedObj.ScaleTo(new Vector2(nestedObj.Scale.X * amountDrawables / (amountDrawables + s.HitObject.IndexInMap)));
+                }
+            }
+            else if (drawable is DrawableOsuHitObject d)
+            {
+                var h = d.HitObject;
+                using (d.BeginAbsoluteSequence(h.StartTime - h.TimePreempt))
+                    d.ScaleTo(new Vector2(d.Scale.X * amountDrawables / (amountDrawables + d.HitObject.IndexInMap)));
+            }
         }
     }
 }
